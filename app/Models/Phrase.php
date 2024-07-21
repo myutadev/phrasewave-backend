@@ -9,6 +9,8 @@ class Phrase extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['phrase'];
+
     public function words()
     {
         return $this->belongsToMany(Word::class);
