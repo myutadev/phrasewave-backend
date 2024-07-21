@@ -44,4 +44,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function userBackgrounds()
+    {
+        return $this->hasMany(UserBackground::class);
+    }
+
+    public function userRequests()
+    {
+        return $this->hasMany(UserRequest::class);
+    }
+    public function words()
+    {
+        return $this->hasMany(Word::class);
+    }
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }
