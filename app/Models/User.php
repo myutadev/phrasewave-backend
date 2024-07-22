@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'country_code',
+        'first_language_code'
     ];
 
     /**
@@ -43,5 +45,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function userBackgrounds()
+    {
+        return $this->hasMany(UserBackground::class);
+    }
+
+    public function userRequests()
+    {
+        return $this->hasMany(UserRequest::class);
+    }
+    public function words()
+    {
+        return $this->hasMany(Word::class);
+    }
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }
