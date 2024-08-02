@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Database\Eloquent\Collection;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class GeneratePhraseService
 {
@@ -11,25 +12,25 @@ class GeneratePhraseService
      * request openAI api to generate phrases
      *
      * @param mixed $request request data from Form  
-     * @return json 
+     * @return Collection
      */
-    public function generatePhrase($request)
+    public function generatePhrase($request): Collection
     {
         $formData = $request->json()->all();
 
         $studyLang = $formData["language"];
         $studyWords = $this->getWordPhraseObj($formData);
 
-        
+        return $this->generateStudyPhrases($studyLang, $studyWords);
     }
 
     /**
      * process request data to studyWords Object
      *
-     * @param object $formData  request data converted to json 
-     * @return object return array has object ex.[{word:overload,context:the system was overloaded.}]
+     * @param array $formData  request data converted to json 
+     * @return array return array has object ex.[{word:overload,context:the system was overloaded.}]
      */
-    public function getWordPhraseObj($formData)
+    public function getWordPhraseObj(array $formData): array
     {
         $wordKeys = ['word1', 'word2', 'word3', 'word4', 'word5'];
         $contextKeys = [
@@ -54,6 +55,36 @@ class GeneratePhraseService
         return $filteredStudyWords;
     }
 
-    // formData is {"language":"English (British)",
-    // "word1":"overload","word2":"obsolate","word3":null,"word4":null,"word5":null,"context1":"The power shut off after all the circuits were overloaded","context2":null,"context3":null,"context4":null,"context5":null} 
+    /**
+     * process request data to studyWords Object
+     *
+     * @param string $studyLang Language to study
+     * @param array $studyWords word and context pair array 
+     * @return Collection return array has object ex.[{word:overload,context:the system was overloaded.}]
+     */
+    public function generateStudyPhrases(string $studyLang, array $studyWords): Collection
+    {
+
+        try {
+            $result = OpenAI::chat()->create([
+                'model' => 'gpt-4o-mini',
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => "As an $studyLang teacher, create 3 example sentences using only the words from the input JSON. 
+                        Ensure each word is used at least once, and try to include 3 or more words in each sentence if possible. If fewer than 3 words, 
+                        reuse them to make 3 sentences. RETURN ONLY JSON: [{'usedWords': ['word1', 'word2', ...], 'generatedPhrase': 'Sentence using the words.'}]."
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => json_encode($studyWords)
+                    ],
+                ],
+            ]);
+            $jsonResult = $result['choices'][0]['message']['content'];
+            return Collection::make(json_decode($jsonResult));
+        } catch (\Exception $e) {
+            throw new \Exception("Failed to generate study sentences: " . $e->getMessage());
+        }
+    }
 }
