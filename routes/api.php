@@ -15,6 +15,9 @@ Route::get('/languages', GetAllLanguagesController::class);
 
 Route::post('/generate', GeneratePhrasesController::class);
 
+Route::post('/myphrases', GeneratePhrasesController::class);
+Route::delete('/myphrases', GeneratePhrasesController::class);
+
 Route::get('/csrf-token', function (Request $request) {
     return response()->json(['token' => csrf_token()]);
 });

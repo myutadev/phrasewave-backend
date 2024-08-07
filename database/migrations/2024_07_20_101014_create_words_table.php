@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('words', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->char('language_code', 2)->nullable();
+            $table->char('language_code', 5)->nullable();
             $table->string('word');
             $table->integer('display_count')->default(1);
             $table->boolean('is_archived')->default(false);
