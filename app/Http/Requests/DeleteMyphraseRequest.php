@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateMyphraseRequest extends FormRequest
+class DeleteMyphraseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +21,10 @@ class CreateMyphraseRequest extends FormRequest
      */
     public function rules(): array
     {
-        return
-            [
-                "user_id" => 'required | integer | exists:users,id',
-                "language" => 'required | string | exists:languages,name',
-                "words" => 'required | array | min:1',
-                "words.*" => 'required | string',
-                "phrase" => 'required | string'
-
-            ];
+        return [
+            "wordIds" => 'required | array | min:1',
+            "wordIds.*" => "required | integer",
+            "phraseId" => 'required | integer | exists:phrases,id',
+        ];
     }
 }

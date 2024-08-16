@@ -22,8 +22,8 @@ class GeneratePhrasesController extends Controller
     {
 
         try {
-            $res = $this->generatePhraseService->generatePhrase($request);
-            //テスト用に固定テキストを返すようにする
+            // $res = $this->generatePhraseService->generatePhrase($request);
+            // テスト用に固定テキストを返すようにする
             sleep(1);
             $testData = [
                 [

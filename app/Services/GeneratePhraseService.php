@@ -2,11 +2,18 @@
 
 namespace App\Services;
 
+use App\Repositories\LanguageRepository;
 use Illuminate\Database\Eloquent\Collection;
 use OpenAI\Laravel\Facades\OpenAI;
 
 class GeneratePhraseService
 {
+    protected $languageRepository;
+
+    public function __construct(LanguageRepository $languageRepository)
+    {
+        $this->languageRepository = $languageRepository;
+    }
 
     /**
      * request openAI api to generate phrases
