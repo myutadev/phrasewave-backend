@@ -20,4 +20,9 @@ class LanguageRepository implements LanguageRepositoryInterface
     {
         return $this->language->all();
     }
+
+    public function getLangCodeByName($languageName): string
+    {
+        return $this->getAll()->where('name', $languageName)->first()->language_code;
+    }
 }

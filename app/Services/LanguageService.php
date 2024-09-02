@@ -17,6 +17,6 @@ class LanguageService
 
     public function getAll(): Collection
     {
-        return  $this->languageRepository->getAll();
+        return  $this->languageRepository->getAll();    
     }
 }
