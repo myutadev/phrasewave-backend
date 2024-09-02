@@ -48,4 +48,14 @@ class MyphraseService
             "phrase" => $newPhraseData["phrase"]
         ];
     }
+
+    /**
+     * get wordsWith Phrases data for Myphrases page
+     * @param int $userId userid from Auth
+     * @return array ex ["study": ['phrases'=>["study is ...", "the obsolate study.."], 'language' => 'English (US)'], "obsolate":['phrases'=>["the obsolate study..."],'languages'=>'English (US)']] 
+     */
+    public function getAllSavedPhrasesByUser(int $userId): array
+    {
+        return  $this->myphraseRepository->getUserWordsWithPhrases($userId);
+    }
 }

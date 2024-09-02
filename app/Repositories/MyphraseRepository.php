@@ -7,6 +7,8 @@ use App\Models\Word;
 use App\Repositories\interfaces\MyphraseRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Number;
+use Ramsey\Uuid\Type\Integer;
 
 class MyphraseRepository implements MyphraseRepositoryInterface
 {
@@ -126,5 +128,36 @@ class MyphraseRepository implements MyphraseRepositoryInterface
             DB::rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Get all saved Words Obj by UserId  
+     * @param integer $userId user id from auth;
+     * @return array ex ["study": ['phrases'=>["study is ...", "the obsolate study.."], 'language' => 'English (US)'], "obsolate":['phrases'=>["the obsolate study..."],'languages'=>'English (US)']] 
+     */
+
+    public function getUserWordsWithPhrases(int $userId): array
+    {
+        $wordsByUser = Word::where('user_id', $userId)->with(['phrases', 'language'])->get();
+        $wordPhrasesArray = $wordsByUser->map(function ($item) {
+            // dd($item);
+            return [$item['word'] => [
+                'phrases' => $this->createPhraseArray($item['phrases']->toArray()),
+                'language' => $item->language->name
+            ]];
+        });
+
+        return $wordPhrasesArray->toArray();
+    }
+
+    private function createPhraseArray(array $phrasesValue): array
+    {
+        $phraseArray = array_map(
+            function ($phraseObj) {
+                return $phraseObj["phrase"];
+            },
+            $phrasesValue
+        );
+        return $phraseArray;
     }
 }

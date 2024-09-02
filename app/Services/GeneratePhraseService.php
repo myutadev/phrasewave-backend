@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\LanguageRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
 
 class GeneratePhraseService
@@ -73,18 +74,20 @@ class GeneratePhraseService
     {
 
         try {
+            Log::alert('this isJSON_UNESCAPED_UNICODE:' . json_encode($studyWords, JSON_UNESCAPED_UNICODE));
+            // Log::alert('json_encode($studyWords):' . json_encode($studyWords));
             $result = OpenAI::chat()->create([
                 'model' => 'gpt-4o-mini',
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => "As an $studyLang teacher, create 3 example sentences using only the words from the input JSON. 
+                        'content' => "As an $studyLang teacher, create 3 example sentences using only the words from the input JSON.
                         Ensure each word is used at least once, and try to include 3 or more words in each sentence if possible. If fewer than 3 words, 
                         reuse them to make 3 sentences. RETURN ONLY JSON: [{'usedWords': ['word1', 'word2', ...], 'generatedPhrase': 'Sentence using the words.'}]."
                     ],
                     [
                         'role' => 'user',
-                        'content' => json_encode($studyWords)
+                        'content' => json_encode($studyWords, JSON_UNESCAPED_UNICODE)
                     ],
                 ],
             ]);

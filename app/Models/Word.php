@@ -18,7 +18,7 @@ class Word extends Model
 
     public function language()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'language_code', 'language_code');
     }
 
     public function phrases()

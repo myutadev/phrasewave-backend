@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
 
 class MyphraseRepositoryTest extends TestCase
 {
@@ -164,5 +165,67 @@ class MyphraseRepositoryTest extends TestCase
             'user_id' => 1,
             'language_code' => 'en-US',
         ]);
+    }
+
+    /**
+     * Test that get All words by user correctly. 
+     * @test
+     * @covers \App\Repositories\MyphraseRepository::getUserWordsWithPhrases
+     * $return void
+     */
+    public function test_get_user_words_with_phrases_and_language_correctly(): void
+    {
+        $insertData1 = [
+            'words' => ['test', 'example'],
+            'user_id' => 1,
+            'language_code' => 'en-US',
+            'phrase' => 'This is a test example',
+        ];
+
+        $insertData2 = [
+            'words' => ['obsolate', 'example'],
+            'user_id' => 1,
+            'language_code' => 'en-US',
+            'phrase' => 'Obsolate example',
+        ];
+        $result1 = $this->myphraseRepository->insertMyPhrase($insertData1);
+        $result2 = $this->myphraseRepository->insertMyPhrase($insertData2);
+
+        $resultData = $this->myphraseRepository->getUserWordsWithPhrases(1);
+        // test, example,obsolateで長さ3の配列ができる。
+        assertEquals(3, count($resultData));
+
+        $expectedResult = [
+            [
+                'test' => [
+                    'phrases' => [
+                        "This is a test example"
+                    ],
+                    'language' => 'English (US)'
+                ]
+            ],
+            [
+                'example' => [
+                    'phrases' => [
+                        "This is a test example",
+                        "Obsolate example"
+                    ],
+                    'language' => 'English (US)'
+
+                ]
+            ],
+            [
+                'obsolate' => [
+                    'phrases' => [
+                        "Obsolate example"
+                    ],
+                    'language' => 'English (US)'
+                ]
+
+            ]
+
+        ];
+
+        assertEquals($expectedResult, $resultData);
     }
 }

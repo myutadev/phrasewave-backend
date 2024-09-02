@@ -11,7 +11,7 @@ class Language extends Model
 
     public function words()
     {
-        return $this->hasMany(Word::class);
+        return $this->hasMany(Word::class, 'language_code', 'language_code');
     }
 
     public function users()
