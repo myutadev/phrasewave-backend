@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Phrase;
 use App\Models\Word;
-use App\Repositories\interfaces\MyphraseRepositoryInterface;
+use App\Repositories\Interfaces\MyphraseRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Number;
