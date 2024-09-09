@@ -1,66 +1,71 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Phrase Wave バックエンド
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## アプリケーション概要
+Phrase Waveは、言語学習者のためのWebアプリケーションです。このリポジトリはバックエンドAPIを管理します。フロントエンドからのリクエストを処理し、OpenAI APIを使用して例文を生成し、ユーザーデータを管理します。
 
-## About Laravel
+API URL: https://api.phrasewave.com/
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+※現バージョンでは単純に入力した単語を組み合わせて例文を生成し、保存をすることしかできませんが、今後のバージョンではユーザーのプロフィールに合わせた例文の生成、過去に学んだ単語が復習できるように、新たな例文生成時に組み込むことができるように機能を追加していきます。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 主要機能
+- ユーザー認証・管理API(Laravel Breeze)
+- OpenAI APIを利用した例文生成
+- ユーザーのフレーズ保存・取得API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 技術スタック
+- 言語: PHP 8.2+
+- フレームワーク: Laravel 11.x
+- AI 統合: OpenAI PHP SDK for Laravel (openai-php/laravel ^0.10.1)
+- データベース: MySQL (Amazon RDS)
+- 認証: Laravel Sanctum
+- API: RESTful API
 
-## Learning Laravel
+## インフラストラクチャ
+- クラウドプラットフォーム: AWS (Amazon Web Services)
+- コンテナ化: Docker
+- データベース: Amazon RDS
+- 仮想プライベートクラウド (VPC)
+  - パブリックサブネット (アプリケーションサーバー用)
+  - プライベートサブネット (データベース用)
+- ロードバランシング: Elastic Load Balancer (ELB)
+- コンピューティング: Amazon EC2 (複数のアベイラビリティーゾーンにわたる)
+- API ゲートウェイ: AWS Internet Gateway
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## データベース構造 (ER図)
+水色部分は未実装(サービスの有料化を見据えたテーブル)
+UserRequestsテーブルも今回のバージョンでは未使用(無料会員の利用回数制限用)
+![ER図](docs/images/phrasewave-er.png)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+主要テーブル：
+*現在のβ版では利用していないテーブル･カラムが多数あります
+- users: ユーザー情報を管理
+- user_backgrounds:ユーザーの付随情報を管理(将来的にはこれらの情報を例文生成次のリクエストに含める)
+- phrases: 生成された例文とそれに関連する単語を保存
+- words:生成された単語を保存(例文として何回利用されたかの履歴情報も保存)
+- user_phrases: ユーザーと保存された例文の関連を管理
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## UML図
+![UML図](docs/images/phrasewave-uml.png)
 
-## Laravel Sponsors
+### シングルアクションコントローラーの採用
+各コントローラーはシングルアクションコントローラーとして設計されています。これにより、各コントローラーが単一の責務を持つようになり、コードの可読性と保守性が向上します。シングルアクションコントローラーの導入により、各アクションの処理内容が明確になり、テストの容易さも確保されています。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Repository層とService層の分離
+アプリケーションのビジネスロジックとデータアクセスロジックを明確に分離するために、Repository層とService層を別々に設けています。
 
-### Premium Partners
+Repository層: データベースとの直接的なやり取りを担当し、データの取得、保存、更新、削除などの操作を行います。これにより、データアクセスに関するコードが一元化され、他の部分から独立して管理できます。
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Service層: ビジネスロジックを実装し、複数のリポジトリを組み合わせて複雑な操作を行います。Service層を設けることで、ビジネスルールの変更が容易になり、再利用性の高いコード構造を実現しています。
 
-## Contributing
+## API エンドポイント
+*ユーザー認証関連以外の自分で開発したAPIを下記にドキュメント化しています
+https://app.swaggerhub.com/apis-docs/MYUTADEV/phrasewave-api/1.0.0#/
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 今後の開発予定
+- パフォーマンス最適化
+- キャッシュ層の追加
+- 翻訳+音声読み上げ用の外部APIリクエスト機能の実装
+- 単語帳機能の実装
+- OpenAI APIの利用制限の実装
+- ユーザープロフィールに基づいたカスタム例文生成ロジックの実装
