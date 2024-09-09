@@ -20,16 +20,20 @@ API URL: https://api.phrasewave.com/
 - 認証: Laravel Sanctum
 - API: RESTful API
 
-## インフラストラクチャ
+### インフラストラクチャ
 - クラウドプラットフォーム: AWS (Amazon Web Services)
+- フロントエンドホスティング: AWS Amplify
 - コンテナ化: Docker
 - データベース: Amazon RDS
 - 仮想プライベートクラウド (VPC)
   - パブリックサブネット (アプリケーションサーバー用)
   - プライベートサブネット (データベース用)
 - ロードバランシング: Elastic Load Balancer (ELB)
-- コンピューティング: Amazon EC2 (複数のアベイラビリティーゾーンにわたる)
-- API ゲートウェイ: AWS Internet Gateway
+- コンピューティング: Amazon EC2
+- ドメイン管理・DNS: Amazon Route 53
+
+## サーバー構成
+![AWS構成図](/docs/images/phrasewave-aws.png)
 
 ## データベース構造 (ER図)
 水色部分は未実装(サービスの有料化を見据えたテーブル)
