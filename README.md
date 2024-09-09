@@ -17,7 +17,7 @@ API URL: https://api.phrasewave.com/
 - フレームワーク: Laravel 11.x
 - AI 統合: OpenAI PHP SDK for Laravel (openai-php/laravel ^0.10.1)
 - データベース: MySQL (Amazon RDS)
-- 認証: Laravel Sanctum
+- 認証: Laravel Sanctum (API認証) + Laravel Breeze (ユーザー認証)
 - API: RESTful API
 
 ### インフラストラクチャ
@@ -40,7 +40,7 @@ API URL: https://api.phrasewave.com/
 UserRequestsテーブルも今回のバージョンでは未使用(無料会員の利用回数制限用)
 ![ER図](docs/images/phrasewave-er.png)
 
-主要テーブル：
+主要テーブル:  
 *現在のβ版では利用していないテーブル･カラムが多数あります
 - users: ユーザー情報を管理
 - user_backgrounds:ユーザーの付随情報を管理(将来的にはこれらの情報を例文生成次のリクエストに含める)
@@ -62,7 +62,7 @@ Repository層: データベースとの直接的なやり取りを担当し、�
 Service層: ビジネスロジックを実装し、複数のリポジトリを組み合わせて複雑な操作を行います。Service層を設けることで、ビジネスルールの変更が容易になり、再利用性の高いコード構造を実現しています。
 
 ## API エンドポイント
-*ユーザー認証関連以外の自分で開発したAPIを下記にドキュメント化しています
+*ユーザー認証関連以外の自分で開発したAPIを下記にドキュメント化しています  
 https://app.swaggerhub.com/apis-docs/MYUTADEV/phrasewave-api/1.0.0#/
 
 
