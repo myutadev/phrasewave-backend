@@ -73,3 +73,4 @@ https://app.swaggerhub.com/apis-docs/MYUTADEV/phrasewave-api/1.0.0#/
 - 単語帳機能の実装
 - OpenAI APIの利用制限の実装
 - ユーザープロフィールに基づいたカスタム例文生成ロジックの実装
+- CI/CDパイプラインの構築
