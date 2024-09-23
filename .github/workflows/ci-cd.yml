@@ -26,8 +26,8 @@ jobs:
         '
         cd program/phrasewave-backend/
         git pull origin main
-        .env  docker-compose.yml doen
-        .env  docker-compose.yml up -d --build
+        docker compose down
+        docker compose up -d --build
         '
 #   test:
 #     runs-on: ubuntu-latest
