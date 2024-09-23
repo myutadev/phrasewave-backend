@@ -25,9 +25,8 @@ jobs:
         ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST '
           cd program/phrasewave-backend/
           git pull origin main
-          alias sail="[ -f sail ] && bash sail || bash vendor/bin/sail"
-          sail down
-          sail up -d --build
+          [ -f sail ] && bash sail down || bash vendor/bin/sail down
+          [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
         '
 #   test:
 #     runs-on: ubuntu-latest
