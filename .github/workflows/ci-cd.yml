@@ -22,13 +22,12 @@ jobs:
         EC2_HOST: ${{ secrets.EC2_HOST }}
         EC2_USER: ${{ secrets.EC2_USER }}
       run: |
-        ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST
-        '
-        cd program/phrasewave-backend/
-        git pull origin main
-        alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-        sail down
-        sail up -d --build
+        ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST '
+          cd program/phrasewave-backend/
+          git pull origin main
+          alias sail="[ -f sail ] && bash sail || bash vendor/bin/sail"
+          sail down
+          sail up -d --build
         '
 #   test:
 #     runs-on: ubuntu-latest
