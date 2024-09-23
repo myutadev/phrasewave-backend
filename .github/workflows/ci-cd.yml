@@ -25,6 +25,7 @@ jobs:
         ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST '
           cd program/phrasewave-backend/
           git pull origin main
+          docker system prune -a -f
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
         '
