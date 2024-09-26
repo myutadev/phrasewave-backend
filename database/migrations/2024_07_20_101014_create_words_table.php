@@ -17,10 +17,10 @@ return new class extends Migration
             $table->char('language_code', 5)->nullable();
             $table->string('word');
             $table->integer('display_count')->default(1);
-            $table->boolean('is_archived')->default(false);
+            $table->boolean('is_favorite')->default(false);
             $table->timestamps();
-
             $table->foreign('language_code')->references('language_code')->on('languages')->onDelete('set null');
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +32,7 @@ return new class extends Migration
         Schema::table('words', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['language_code']);
+            $table->dropSoftDeletes();
         });
 
         Schema::dropIfExists('words');
