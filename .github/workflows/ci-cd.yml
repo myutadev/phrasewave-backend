@@ -43,6 +43,7 @@ jobs:
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
         '
+#   memo for test deploy
 #   test:
 #     runs-on: ubuntu-latest
 
