@@ -29,6 +29,7 @@ jobs:
           docker system prune -a -f
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
+          [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
         '
         
     - name: Deploy to EC2-2
@@ -42,6 +43,7 @@ jobs:
           docker system prune -a -f
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
+          [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
         '
 #   memo for test deploy
 #   test:
