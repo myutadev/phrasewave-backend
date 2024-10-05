@@ -142,11 +142,14 @@ class MyphraseRepository implements MyphraseRepositoryInterface
         $wordPhrasesArray = $wordsByUser->map(function ($item) {
             // dd($item);
             return [$item['word'] => [
+                'wordId' => $item->id,
+                'phraseIds' => $item->phrases->map(function ($phrase) {
+                    return $phrase->id;
+                }),
                 'phrases' => $this->createPhraseArray($item['phrases']->toArray()),
                 'language' => $item->language->name
             ]];
         });
-
         return $wordPhrasesArray->toArray();
     }
 

@@ -64,7 +64,7 @@ class MyphraseService
     /**
      * softDelete selected word
      * @param int $wordId
-     * @return array ex ["study": ['phrases'=>["study is ...", "the obsolate study.."], 'language' => 'English (US)'], "obsolate":['phrases'=>["the obsolate study..."],'languages'=>'English (US)']] 
+     * @return array ex 
      */
     public function deleteSavedWord(int $wordId): ?Word
     {
