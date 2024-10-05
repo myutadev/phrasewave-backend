@@ -117,7 +117,7 @@ class MyphraseRepository implements MyphraseRepositoryInterface
             foreach ($wordIds as $wordId) {
                 $isExists =  DB::table('phrase_word')->where('word_id', $wordId)->exists();
                 if ($isExists) continue;
-                Word::find($wordId)->delete();
+                Word::find($wordId)->forceDelete();
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -142,11 +142,14 @@ class MyphraseRepository implements MyphraseRepositoryInterface
         $wordPhrasesArray = $wordsByUser->map(function ($item) {
             // dd($item);
             return [$item['word'] => [
+                'wordId' => $item->id,
+                'phraseIds' => $item->phrases->map(function ($phrase) {
+                    return $phrase->id;
+                }),
                 'phrases' => $this->createPhraseArray($item['phrases']->toArray()),
                 'language' => $item->language->name
             ]];
         });
-
         return $wordPhrasesArray->toArray();
     }
 
@@ -159,5 +162,38 @@ class MyphraseRepository implements MyphraseRepositoryInterface
             $phrasesValue
         );
         return $phraseArray;
+    }
+
+    /**
+     *SoftDelete saved words
+     *@param integer word id from client
+     *@return ?Word word object or null(if failed)
+     */
+
+    public function deleteWord($wordId): ?Word
+    {
+        $word = Word::find($wordId);
+
+        if (!$word) {
+            return null;
+        }
+        $word->delete();
+        return $word;
+    }
+
+    /**
+     *SoftDelete saved words
+     *@param integer word id from client
+     *@return ?Word word object or null(if failed)
+     */
+
+    public function restoreWord($wordId): ?Word
+    {
+        $word = Word::withTrashed()->where('id', $wordId)->first();
+        if (!$word) {
+            return null;
+        }
+        $word->restore();
+        return $word;
     }
 }

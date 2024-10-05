@@ -1,0 +1,27 @@
+[34m 0[39m: use app/Repositories/MyphraseRepository.php
+[34m 1[39m: use app/Repositories/MyphraseRepository;
+[34m 2[39m: use App\Repositories\MyphraseRepository;
+[34m 3[39m: $repository = new MyphraseRepository();
+[34m 4[39m: $repository->deleteWord(1);
+[34m 5[39m: use App\Repositories\MyphraseRepository;
+[34m 6[39m: $repository = new MyphraseRepository();
+[34m 7[39m: $repository->restoreWord(1);
+[34m 8[39m: history
+[34m 9[39m: use App\Repositories\MyphraseRepository;
+[34m10[39m: $repository = new MyphraseRepository();
+[34m11[39m: $repository->restoreWord(1);
+[34m12[39m: use App\Services\MyphraseService
+[34m13[39m: $myphraseService = new MyphraseService
+[34m14[39m: ;
+[34m15[39m: history
+[34m16[39m: use App\Repositories\MyphraseRepository;
+[34m17[39m: use App\Repositories\LanguageRepository;
+[34m18[39m: $myphraseRepository = new MyphraseRepository();
+[34m19[39m: $languageRepository = new LanguageRepository();
+[34m20[39m: use App\Models\Language;
+[34m21[39m: $language = new Language();
+[34m22[39m: $languageRepository = new LanguageRepository($language);
+[34m23[39m: $myphraseService = new MyphraseService($myphraseRepository,$languageRepository);
+[34m24[39m: $myphraseService->deleteSavedWord(2);
+[34m25[39m: history
+[34m26[39m: $repository = new MyphraseRepository();

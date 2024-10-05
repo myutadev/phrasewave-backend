@@ -9,6 +9,7 @@ class Language extends Model
 {
     use HasFactory;
 
+    public $timestamps = false; 
     public function words()
     {
         return $this->hasMany(Word::class, 'language_code', 'language_code');

@@ -117,7 +117,7 @@ class MyphraseRepositoryTest extends TestCase
      * @covers \App\Repositories\MyphraseRepository::deleteMyphrase
      * $return void
      */
-    public function test_delete_words_phrase_phrase_ordsRelation_correctly(): void
+    public function test_delete_words_phrase_phrase_words_Relation_correctly(): void
     {
         $insertData1 = [
             'words' => ['test', 'example'],
@@ -135,6 +135,7 @@ class MyphraseRepositoryTest extends TestCase
         $result1 = $this->myphraseRepository->insertMyPhrase($insertData1);
         $result2 = $this->myphraseRepository->insertMyPhrase($insertData2);
 
+        // testとexampleが含まれている例文を削除
         $this->myphraseRepository->deleteMyphrase($result1);
         // word=testは消えている、word=exampleは消えていないはず
         $this->assertDatabaseHas('words', [
@@ -227,5 +228,47 @@ class MyphraseRepositoryTest extends TestCase
         ];
 
         assertEquals($expectedResult, $resultData);
+    }
+
+
+    /**
+     * Test that softDelete function for word. 
+     * @test
+     * @covers \App\Repositories\MyphraseRepository::deleteWord and restoreWord
+     * $return void
+     */
+    public function test_softDelete_word_if_deleted_at_has_timestamp_after_the_process_and_restore_correctly(): void
+    {
+        $insertData1 = [
+            'words' => ['test', 'example'],
+            'user_id' => 1,
+            'language_code' => 'en-US',
+            'phrase' => 'This is a test example',
+        ];
+
+        $this->myphraseRepository->insertMyPhrase($insertData1);
+
+        $result = $this->myphraseRepository->deleteWord(1);
+        // word=testは消えている、word=exampleは消えていないはず
+        $this->assertDatabaseHas('words', [
+            'id' => 1, // ソフトデリートされたワードのID
+            'deleted_at' => now(), // もしくはアサート用のタイムスタンプを使う
+        ]);
+
+        // 4. 別のワードがまだ存在することを確認
+        $this->assertDatabaseHas('words', [
+            'word' => 'example',
+            'user_id' => 1,
+            'language_code' => 'en-US',
+        ]);
+
+        // 5. 復元処理を実行
+        $restoredWord = $this->myphraseRepository->restoreWord(1);
+
+        // 6. 復元後、deleted_atがNULLになっていることを確認
+        $this->assertDatabaseHas('words', [
+            'id' => 1,
+            'deleted_at' => null,
+        ]);
     }
 }

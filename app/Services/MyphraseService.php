@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Word;
 use App\Repositories\LanguageRepository;
 use App\Repositories\MyphraseRepository;
+use Exception;
 
 class MyphraseService
 {
@@ -57,5 +59,33 @@ class MyphraseService
     public function getAllSavedPhrasesByUser(int $userId): array
     {
         return  $this->myphraseRepository->getUserWordsWithPhrases($userId);
+    }
+
+    /**
+     * softDelete selected word
+     * @param int $wordId
+     * @return array ex 
+     */
+    public function deleteSavedWord(int $wordId): ?Word
+    {
+        try {
+            return  $this->myphraseRepository->deleteWord($wordId);
+        } catch (Exception $e) {
+            throw new Exception("failed to soft delete the word");
+        }
+    }
+
+    /**
+     * restore selected word
+     * @param int $wordId
+     * @return array ex ["study": ['phrases'=>["study is ...", "the obsolate study.."], 'language' => 'English (US)'], "obsolate":['phrases'=>["the obsolate study..."],'languages'=>'English (US)']] 
+     */
+    public function restoreSoftDeletedWord(int $wordId): ?Word
+    {
+        try {
+            return  $this->myphraseRepository->restoreWord($wordId);
+        } catch (Exception $e) {
+            throw new Exception('failed to restore the word');
+        }
     }
 }
