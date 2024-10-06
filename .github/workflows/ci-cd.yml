@@ -45,7 +45,7 @@ jobs:
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
           [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
         '
-#   memo for test deploy
+#   memo for test 
 #   test:
 #     runs-on: ubuntu-latest
 
