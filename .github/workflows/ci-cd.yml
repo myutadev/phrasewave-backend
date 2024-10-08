@@ -30,6 +30,7 @@ jobs:
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
           [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
+          [ -f sail ] && bash sail composer install --no-dev --optimize-autoloader || bash vendor/bin/sail composer install --no-dev --optimize-autoloader
         '
         
     - name: Deploy to EC2-2
@@ -44,6 +45,7 @@ jobs:
           [ -f sail ] && bash sail down || bash vendor/bin/sail down
           [ -f sail ] && bash sail up -d --build || bash vendor/bin/sail up -d --build
           [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
+          [ -f sail ] && bash sail composer install --no-dev --optimize-autoloader || bash vendor/bin/sail composer install --no-dev --optimize-autoloader
         '
 #   rebuild  
 #   test:
