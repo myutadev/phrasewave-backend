@@ -47,7 +47,7 @@ jobs:
           [ -f sail ] && bash sail artisan migrate --force || bash vendor/bin/sail artisan migrate --force
           [ -f sail ] && bash sail composer install --no-dev --optimize-autoloader || bash vendor/bin/sail composer install --no-dev --optimize-autoloader
         '
-#   rebuild test
+#   rebuild test2
 #   test:
 #     runs-on: ubuntu-latest
 
