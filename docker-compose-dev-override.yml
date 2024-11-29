@@ -46,7 +46,7 @@ services:
                 - mysqladmin
                 - ping
                 - '-p${DB_PASSWORD}'
-            retries: 3s
+            retries: 3
             timeout: 5s
     mailpit:
         image: 'axllent/mailpit:latest'
