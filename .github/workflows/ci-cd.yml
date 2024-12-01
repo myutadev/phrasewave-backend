@@ -15,13 +15,14 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/ec2_key.pem
         chmod 600 ~/.ssh/ec2_key.pem
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-    - name: Deploy to EC2-1
+        ssh-keyscan -H ${{ secrets.EC2_HOST2 }} >> ~/.ssh/known_hosts
+        
+    - name: Deploy to EC2-2
       env:
-        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_HOST2: ${{ secrets.EC2_HOST2 }}
         EC2_USER: ${{ secrets.EC2_USER }}
       run: |
-        ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST '
+        ssh -i ~/.ssh/ec2_key.pem $EC2_USER@$EC2_HOST2 '
           cd program/phrasewave-backend/
           git pull origin main
           docker system prune -a -f
